@@ -207,8 +207,9 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
  
 if __name__ == "__main__":
     try:
-        with open("config.txt", encoding="utf-8") as f:
-            config = eval(f.read())
+        with open("config.txt", encoding="utf-8") as f1, open("config1.txt", encoding="utf-8") as f2:
+            config1 = eval(f1.read())
+            config2 = eval(f2.read())
     except FileNotFoundError:
         print("推送消息失败，请检查config.txt文件是否与程序位于同一路径")
         os.system("pause")
@@ -221,12 +222,16 @@ if __name__ == "__main__":
     # 获取accessToken
     accessToken = get_access_token()
     # 接收的用户
-    users = config["user"]
+    users = config1["user"]
+    users = config2["user"]
     # 传入地区获取天气信息
-    region = config["region"]
+    region = config1["region"]
+    region = config2["region"]
     weather, temp, wind_dir,xigua = get_weather(region)
-    note_ch = config["note_ch"]
-    note_en = config["note_en"]
+    note_ch = config1["note_ch"]
+    note_ch = config2["note_ch"]
+    note_en = config1["note_en"]
+    note_en = config2["note_en"]
     if note_ch == "" and note_en == "":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
