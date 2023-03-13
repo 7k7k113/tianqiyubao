@@ -54,7 +54,7 @@ def get_weather(region):
     if int(response['daily'][0]["tempMin"]) <= 18:
         xigua = "天气变凉啦，多穿点衣服哦~"
     else:
-        xigua = "今天又是很想你的一天~"
+        xigua = "今天温度不错，适合出门散步~"
     # 风向
     wind_dir = response['daily'][0]["windDirDay"]
     return weather, temp, wind_dir, xigua
