@@ -17,9 +17,9 @@ def get_color():
  
 def get_access_token():
     # appId
-    app_id = config["app_id"]
+    app_id = config1["app_id"]
     # appSecret
-    app_secret = config["app_secret"]
+    app_secret = config1["app_secret"]
     post_url = ("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={}&secret={}"
                 .format(app_id, app_secret))
     try:
@@ -37,7 +37,7 @@ def get_weather(region):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.113 Safari/537.36'
     }
-    key = config["weather_key"]
+    key = config1["weather_key"]
     region_url = "https://geoapi.qweather.com/v2/city/lookup?location={}&key={}".format(region, key)
     response = get(region_url, headers=headers).json()
     print(response)
@@ -123,20 +123,20 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
     today = datetime.date(datetime(year=year, month=month, day=day))
     week = week_list[today.isoweekday() % 7]
     # 获取在一起的日子的日期格式
-    love_year = int(config["love_date"].split("-")[0])
-    love_month = int(config["love_date"].split("-")[1])
-    love_day = int(config["love_date"].split("-")[2])
+    love_year = int(config1["love_date"].split("-")[0])
+    love_month = int(config1["love_date"].split("-")[1])
+    love_day = int(config1["love_date"].split("-")[2])
     love_date = date(love_year, love_month, love_day)
     # 获取在一起的日期差
     love_days = str(today.__sub__(love_date)).split(" ")[0]
     # 获取所有生日数据
     birthdays = {}
-    for k, v in config.items():
+    for k, v in config1.items():
         if k[0:5] == "birth":
             birthdays[k] = v
     data = {
         "touser": to_user,
-        "template_id": config["template_id"],
+        "template_id": config1["template_id"],
         "url": "http://weixin.qq.com/download",
         "topcolor": "#FF0000",
         "data": {
