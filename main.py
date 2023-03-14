@@ -222,11 +222,11 @@ if __name__ == "__main__":
     # 获取accessToken
     accessToken = get_access_token()
     # 接收的用户
-    users = config1["user"]
-    users = config2["user"]
+    users1 = config1["user"]
+    users2 = config2["user"]
     # 传入地区获取天气信息
-    region = config1["region"]
-    region = config2["region"]
+    region1 = config1["region"]
+    region2 = config2["region"]
     weather, temp, wind_dir,xigua = get_weather(region)
     note_ch = config1["note_ch"]
     note_ch = config2["note_ch"]
@@ -237,5 +237,6 @@ if __name__ == "__main__":
         note_ch, note_en = get_ciba()
     # 公众号推送消息
     for user in users:
-        send_message(user, accessToken, region, weather, temp, xigua, wind_dir, note_ch, note_en)
+        send_message(user1, accessToken, region1, weather, temp, xigua, wind_dir, note_ch, note_en)
+        send_message(user2, accessToken, region2, weather, temp, xigua, wind_dir, note_ch, note_en)
     os.system("pause")
