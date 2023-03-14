@@ -354,7 +354,8 @@ if __name__ == "__main__":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
     # 公众号推送消息
-    for user in users:
-        send_message1(user1, accessToken, region1, weather1, temp1, xigua1, wind_dir1, note_ch, note_en)
-        send_message2(user2, accessToken, region2, weather2, temp2, xigua2, wind_dir2, note_ch, note_en)
+    for user in users1:
+        send_message1(user, accessToken, region1, weather1, temp1, xigua1, wind_dir1, note_ch, note_en)
+    for user in users2:
+        send_message2(user, accessToken, region2, weather2, temp2, xigua2, wind_dir2, note_ch, note_en)
     os.system("pause")
