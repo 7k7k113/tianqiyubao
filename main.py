@@ -33,12 +33,12 @@ def get_access_token():
  
 #参考文档https://dev.qweather.com/docs/api/geoapi/city-lookup/
 #参考文档https://dev.qweather.com/docs/api/weather/weather-now/
-def get_weather1(region1):
+def get_weather(region):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.113 Safari/537.36'
     }
     key = config1["weather_key"]
-    region_url = "https://geoapi.qweather.com/v2/city/lookup?location={}&key={}".format(region1, key)
+    region_url = "https://geoapi.qweather.com/v2/city/lookup?location={}&key={}".format(region, key)
     response = get(region_url, headers=headers).json()
     print(response)
 
@@ -48,42 +48,17 @@ def get_weather1(region1):
     weather_url = "https://devapi.qweather.com/v7/weather/3d?location={}&key={}".format(location_id, key)
     response = get(weather_url, headers=headers).json()
     # 天气帅达版
-    weather1 = '白天'+response['daily'][0]["textDay"]+'，'+'傍晚'+response['daily'][0]["textDay"]
+    weather = '白天'+response['daily'][0]["textDay"]+'，'+'傍晚'+response['daily'][0]["textDay"]
     # 当前温度
-    temp1 = response['daily'][0]["tempMin"]+ u"\N{DEGREE SIGN}" + "C"+'—'+response['daily'][0]["tempMax"]+ u"\N{DEGREE SIGN}" + "C"
+    temp = response['daily'][0]["tempMin"]+ u"\N{DEGREE SIGN}" + "C"+'—'+response['daily'][0]["tempMax"]+ u"\N{DEGREE SIGN}" + "C"
     if int(response['daily'][0]["tempMin"]) <= 18:
-        xigua1 = "天气变凉啦，多穿点衣服哦~"
+        xigua = "天气变凉啦，多穿点衣服哦~"
     else:
-        xigua1 = "今天温度不错，适合出门散步~"
+        xigua = "今天温度不错，适合出门散步~"
     # 风向
-    wind_dir1 = response['daily'][0]["windDirDay"]
-    return weather1, temp1, wind_dir1, xigua1
-   
-def get_weather2(region2):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.113 Safari/537.36'
-    }
-    key = config1["weather_key"]
-    region_url = "https://geoapi.qweather.com/v2/city/lookup?location={}&key={}".format(region2, key)
-    response = get(region_url, headers=headers).json()
-    print(response)
+    wind_dir = response['daily'][0]["windDirDay"]
+    return weather, temp, wind_dir, xigua
 
-    # 获取地区的location--id
-    location_id = response['location'][0]["id"]
-    
-    weather_url = "https://devapi.qweather.com/v7/weather/3d?location={}&key={}".format(location_id, key)
-    response = get(weather_url, headers=headers).json()
-    # 天气帅达版
-    weather2 = '白天'+response['daily'][0]["textDay"]+'，'+'傍晚'+response['daily'][0]["textDay"]
-    # 当前温度
-    temp2 = response['daily'][0]["tempMin"]+ u"\N{DEGREE SIGN}" + "C"+'—'+response['daily'][0]["tempMax"]+ u"\N{DEGREE SIGN}" + "C"
-    if int(response['daily'][0]["tempMin"]) <= 18:
-        xigua2 = "天气变凉啦，多穿点衣服哦~"
-    else:
-        xigua2 = "今天温度不错，适合出门散步~"
-    # 风向
-    wind_dir2 = response['daily'][0]["windDirDay"]
-    return weather2, temp2, wind_dir2, xigua2
  
 #--------关注微信公众号：繁星资源，更多资源等你拿----------
 def get_birthday(birthday, year, today):
@@ -140,7 +115,7 @@ def get_ciba():
     return note_ch, note_en
  
  
-def send_message1(to_user, access_token, region_name1, weather1, temp1, xigua1, wind_dir1, note_ch, note_en):
+def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_dir, note_ch, note_en):
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
     week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
     year = localtime().tm_year
@@ -170,20 +145,20 @@ def send_message1(to_user, access_token, region_name1, weather1, temp1, xigua1, 
                 "value": "{} {}".format(today, week),
                 "color": get_color()
             },
-            "region1": {
-                "value": region_name1,
+            "region": {
+                "value": region_name,
                 "color": get_color()
             },
-            "weather1": {
-                "value": weather1,
+            "weather": {
+                "value": weather,
                 "color": get_color()
             },
-            "temp1": {
-                "value": temp1,
+            "temp": {
+                "value": temp,
                 "color": get_color()
             },
-            "wind_dir1": {
-                "value": wind_dir1,
+            "wind_dir": {
+                "value": wind_dir,
                 "color": get_color()
             },
             "love_day": {
@@ -198,8 +173,8 @@ def send_message1(to_user, access_token, region_name1, weather1, temp1, xigua1, 
                 "value": note_ch,
                 "color": get_color()
             },
-            "xigua1":{
-                "value": xigua1,
+            "xigua":{
+                "value": xigua,
                 "color": get_color()
             }
         }
@@ -230,98 +205,6 @@ def send_message1(to_user, access_token, region_name1, weather1, temp1, xigua1, 
     else:
         print(response)
  
- 
- 
-def send_message2(to_user, access_token, region_name2, weather2, temp2, xigua2, wind_dir2, note_ch, note_en):
-    url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
-    week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
-    year = localtime().tm_year
-    month = localtime().tm_mon
-    day = localtime().tm_mday
-    today = datetime.date(datetime(year=year, month=month, day=day))
-    week = week_list[today.isoweekday() % 7]
-    # 获取在一起的日子的日期格式
-    love_year = int(config1["love_date"].split("-")[0])
-    love_month = int(config1["love_date"].split("-")[1])
-    love_day = int(config1["love_date"].split("-")[2])
-    love_date = date(love_year, love_month, love_day)
-    # 获取在一起的日期差
-    love_days = str(today.__sub__(love_date)).split(" ")[0]
-    # 获取所有生日数据
-    birthdays = {}
-    for k, v in config1.items():
-        if k[0:5] == "birth":
-            birthdays[k] = v
-    data = {
-        "touser": to_user,
-        "template_id": config1["template_id"],
-        "url": "http://weixin.qq.com/download",
-        "topcolor": "#FF0000",
-        "data": {
-            "date": {
-                "value": "{} {}".format(today, week),
-                "color": get_color()
-            },
-            "region2": {
-                "value": region_name2,
-                "color": get_color()
-            },
-            "weather2": {
-                "value": weather2,
-                "color": get_color()
-            },
-            "temp2": {
-                "value": temp2,
-                "color": get_color()
-            },
-            "wind_dir2": {
-                "value": wind_dir2,
-                "color": get_color()
-            },
-            "love_day": {
-                "value": love_days,
-                "color": get_color()
-            },
-            "note_en": {
-                "value": note_en,
-                "color": get_color()
-            },
-            "note_ch": {
-                "value": note_ch,
-                "color": get_color()
-            },
-            "xigua2":{
-                "value": xigua2,
-                "color": get_color()
-            }
-        }
-    }
-    for key, value in birthdays.items():
-        # 获取距离下次生日的时间
-        birth_day = get_birthday(value["birthday"], year, today)
-        if birth_day == 0:
-            birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
-        else:
-            birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
-        # 将生日数据插入data
-        data["data"][key] = {"value": birthday_data, "color": get_color()}
-    headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
-    }
-    response = post(url, headers=headers, json=data).json()
-    if response["errcode"] == 40037:
-        print("推送消息失败，请检查模板id是否正确")
-    elif response["errcode"] == 40036:
-        print("推送消息失败，请检查模板id是否为空")
-    elif response["errcode"] == 40003:
-        print("推送消息失败，请检查微信号是否正确")
-    elif response["errcode"] == 0:
-        print("推送消息成功")
-    else:
-        print(response)
-
 
  
 if __name__ == "__main__":
@@ -346,8 +229,8 @@ if __name__ == "__main__":
     # 传入地区获取天气信息
     region1 = config1["region"]
     region2 = config2["region"]
-    weather1, temp1, wind_dir1,xigua1 = get_weather1(region1)
-    weather2, temp2, wind_dir2,xigua2 = get_weather2(region2)
+    weather1, temp1, wind_dir1,xigua1 = get_weather(region1)
+    weather2, temp2, wind_dir2,xigua2 = get_weather(region2)
     note_ch = config2["note_ch"]
     note_en = config2["note_en"]
     if note_ch == "" and note_en == "":
